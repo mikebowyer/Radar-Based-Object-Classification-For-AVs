@@ -265,7 +265,7 @@ plt.ylim(-10,50)
 fig5.set_figheight(20)
 fig5.set_figwidth(20)
 
-fig6  = category_scatter(x='y', y='x', label_col='BasicCategory', 
+fig6  = category_scatter(x='y', y='x', label_col='BasicCategory',
                        data=pointDF, legend_loc='upper left')
 plt.ylabel('Longitudinal Position(x)')
 plt.xlabel('Lateral Position(y)')
@@ -274,3 +274,21 @@ plt.title('Longitudinal Position(x) versus Lateral Position(y)')
 #plt.ylim(-10,50)
 fig6.set_figheight(20)
 fig6.set_figwidth(20)
+
+# =============================================================================
+# 
+# notBusDF=pointDF[~(pointDF['BasicCategory'].str.contains('Bus'))]
+# notBusDF=notBusDF[~(notBusDF['BasicCategory'].str.contains('Tractor'))]
+# notBusDF=notBusDF[~(notBusDF['BasicCategory'].str.contains('Trailer'))]
+# notBusDF=notBusDF[~(notBusDF['BasicCategory'].str.contains('Passenger Vehicle'))]
+# #notBusDF=pointDF[(pointDF['BasicCategory'].str.contains('Bicycle'))]
+# fig6  = category_scatter(x='vy_comp', y='rcs', label_col='BasicCategory', 
+#                        data=notBusDF, legend_loc='upper left')
+# plt.ylabel('Longitudinal Position(x)')
+# plt.xlabel('Lateral Position(y)')
+# plt.title('Longitudinal Position(x) versus Lateral Position(y)')
+# #plt.xlim(-60,60)
+# #plt.ylim(-10,50)
+# fig6.set_figheight(20)
+# fig6.set_figwidth(20)
+# =============================================================================
