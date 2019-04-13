@@ -93,6 +93,7 @@ radarPointwBasicDF['BasicCategory'].value_counts().plot(ax=ax,kind='bar')
 plt.show()
 # =============================================================================
 # 
-# PLOTTING DATA
+# SAVING CLEANSED DATA INTO CSV
 # 
 # =============================================================================
+radarPointwBasicDF.to_csv('Data/CleansedRadarPoints.csv')
