@@ -96,4 +96,4 @@ plt.show()
 # SAVING CLEANSED DATA INTO CSV
 # 
 # =============================================================================
-radarPointwBasicDF.to_csv('Data/CleansedRadarPoints.csv')
+radarPointwBasicDF.to_csv('Data/CleansedRadarPoints.csv',index=False)
