@@ -106,4 +106,4 @@ cleanDF.head()
 # SAVING CLEANSED DATA INTO CSV
 # 
 # =============================================================================
-radarPointwBasicDF.to_csv('../Data/CleansedRadarPoints.csv',index=False)
+cleanDF.to_csv('../Data/CleansedRadarPoints.csv',index=False)
