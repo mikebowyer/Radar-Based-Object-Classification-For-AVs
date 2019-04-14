@@ -8,7 +8,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-path = "Data/labelledRadarPoints.csv"
+path = "../Data/labelledRadarPoints.csv"
 
 #Load in radar points data frame
 radarPointDF = pd.read_csv(path, index_col=False)
@@ -93,7 +93,17 @@ radarPointwBasicDF['BasicCategory'].value_counts().plot(ax=ax,kind='bar')
 plt.show()
 # =============================================================================
 # 
+# REMOVING UNEEDED COLUMNS (z, id, vx, vy, is_quality_valid)
+# 
+# =============================================================================
+cleanDF= radarPointwBasicDF.drop(columns=['z','id','vx','vy','is_quality_valid'])
+cleanDF["BasicCategory"] = cleanDF["BasicCategory"].astype('category')
+cleanDF.dtypes
+cleanDF["BasicCategoryNum"] = cleanDF["BasicCategory"].cat.codes
+cleanDF.head()
+# =============================================================================
+# 
 # SAVING CLEANSED DATA INTO CSV
 # 
 # =============================================================================
-radarPointwBasicDF.to_csv('Data/CleansedRadarPoints.csv',index=False)
+radarPointwBasicDF.to_csv('../Data/CleansedRadarPoints.csv',index=False)
