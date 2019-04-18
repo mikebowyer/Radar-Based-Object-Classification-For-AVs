@@ -11,11 +11,21 @@ import pylab as pl
 import matplotlib.pyplot as plt
 from mlxtend.plotting import category_scatter
 
-path = "../Data/CleansedRadarPoints.csv"
+path = "../Data/OverSampled/OverSampled_FullDataSet.csv"
 
 #Load in cleansed radar points data frame
 pointDF = pd.read_csv(path, index_col=False)
-
+# =============================================================================
+# 
+# PLOTTING FREQUENCIES OF EACH CLASS
+#     
+# =============================================================================
+fig, ax = plt.subplots()
+ax.set_title('Frequency of Basic Categories in Over Sampled Data Set')
+ax.set_xlabel('Basic Category Types')
+ax.set_ylabel('Occurances of each Category')
+pointDF['BasicCategory'].value_counts().plot(ax=ax,kind='bar')
+plt.show()
 # =============================================================================
 # 
 # PLOTTING HISTOGRAMS OF RCS for Objects
@@ -214,7 +224,7 @@ pl.ylabel("Number of ambig_state Bin Occurances for Trailers")
 # =============================================================================
 #
 fig  = category_scatter(x='vx_comp', y='vy_comp', label_col='BasicCategory', 
-                       data=pointDF, legend_loc='upper left')
+                       data=pointDF, legend_loc='upper left',alpha =.3, colors=('blue', 'green', 'red', 'purple', 'black','yellow', 'cyan','orange'))
 plt.xlabel('Relative Longitudinal Velocity (vx_comp)')
 plt.ylabel('Relative Lateral Velocity (xy_comp)')
 plt.title('Relative Longitudinal Velocity (vx_comp) versus Relative Lateral Velocity (xy_comp')
@@ -225,7 +235,7 @@ fig.set_figwidth(20)
 
 
 fig2 = category_scatter(x='x', y='rcs', label_col='BasicCategory', 
-                       data=pointDF, legend_loc='upper left')
+                       data=pointDF, legend_loc='upper left',alpha =.3, colors=('blue', 'green', 'red', 'purple', 'black','yellow', 'cyan','orange'))
 plt.xlabel('Longitudinal Distance (x)')
 plt.ylabel('Radar Cross Section(rcs)')
 plt.title('Longitudinal Distance (x) versus Radar Cross Section(rcs)')
@@ -235,18 +245,18 @@ fig2.set_figheight(20)
 fig2.set_figwidth(20)
 
 fig3 = category_scatter(x='y', y='rcs', label_col='BasicCategory', 
-                       data=pointDF, legend_loc='upper left')
+                       data=pointDF, legend_loc='upper left',alpha =.3, colors=('blue', 'green', 'red', 'purple', 'black','yellow', 'cyan','orange'))
 plt.xlabel('Lateral Distance (y)')
 plt.ylabel('Radar Cross Section(rcs)')
 plt.title('Lateral Distance (y) versus Radar Cross Section(rcs)')
-plt.xlim(-50,50)
-plt.ylim(-50,50)
+plt.xlim(-75,75)
+plt.ylim(-10,50)
 fig3.set_figheight(20)
 fig3.set_figwidth(20)
 
 
 fig4  = category_scatter(x='vx_comp', y='rcs', label_col='BasicCategory', 
-                       data=pointDF, legend_loc='upper left')
+                       data=pointDF, legend_loc='upper left',alpha =.3, colors=('blue', 'green', 'red', 'purple', 'black','yellow', 'cyan','orange'))
 plt.xlabel('Relative Longitudinal Velocity (vx_comp)')
 plt.ylabel('Radar Cross Section (RCS)')
 plt.title('Relative Longitudinal Velocity (vx_comp) versus Radar Cross Section (RCS)')
@@ -256,7 +266,7 @@ fig4.set_figheight(20)
 fig4.set_figwidth(20)
 
 fig5  = category_scatter(x='vy_comp', y='rcs', label_col='BasicCategory', 
-                       data=pointDF, legend_loc='upper left')
+                       data=pointDF, legend_loc='upper left',alpha =.3, colors=('blue', 'green', 'red', 'purple', 'black','yellow', 'cyan','orange'))
 plt.xlabel('Relative Lateral Velocity (vy_comp)')
 plt.ylabel('Radar Cross Section (RCS)')
 plt.title('Relative Lateral Velocity (vy_comp) versus Radar Cross Section (RCS)')
@@ -266,7 +276,7 @@ fig5.set_figheight(20)
 fig5.set_figwidth(20)
 
 fig6  = category_scatter(x='y', y='x', label_col='BasicCategory',
-                       data=pointDF, legend_loc='upper left')
+                       data=pointDF, legend_loc='upper left',alpha =.3, colors=('blue', 'green', 'red', 'purple', 'black','yellow', 'cyan','orange'))
 plt.ylabel('Longitudinal Position(x)')
 plt.xlabel('Lateral Position(y)')
 plt.title('Longitudinal Position(x) versus Lateral Position(y)')
@@ -278,7 +288,7 @@ fig6.set_figwidth(20)
 
 
 fig7  = category_scatter(x='x', y='y', label_col='BasicCategory', 
-                       data=pointDF, legend_loc='upper left',alpha =.3)
+                       data=pointDF, legend_loc='upper left',alpha =.3, colors=('blue', 'green', 'red', 'purple', 'black','yellow', 'cyan','orange'))
 plt.ylabel('Longitudinal Position(x)')
 plt.xlabel('Lateral Position(y)')
 plt.title('Longitudinal Position(x) versus Lateral Position(y)')
