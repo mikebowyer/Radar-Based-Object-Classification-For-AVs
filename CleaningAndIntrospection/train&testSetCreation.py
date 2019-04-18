@@ -7,25 +7,39 @@ Created on Wed Apr 17 21:41:39 2019
 import pandas as pd 
 import numpy as np
 from imblearn.combine import SMOTETomek
+from imblearn.over_sampling import SMOTENC
 from sklearn.model_selection import train_test_split  
-
+import time
 #read in clean data set
 path = "../Data/CleansedRadarPoints.csv"
 pointDF = pd.read_csv(path, index_col=False)
 columns=['x','y','dyn_prop','rcs','vx_comp','vy_comp','ambig_state','x_rms','y_rms','invalid_state','pdh0','vx_rms','vy_rms','BasicCategoryNum']
 #divide data from labels
-X=pointDF[['x','y','dyn_prop','rcs','vx_comp','vy_comp','ambig_state','x_rms','y_rms','invalid_state','pdh0','vx_rms','vy_rms']].to_numpy()
-y=pointDF['BasicCategoryNum']
+pointDF.x_rms.value_counts()
 # =============================================================================
 # 
 # CREATE OVERSAMPLED DATASET
 # 
 # =============================================================================
-smt = SMOTETomek(ratio='auto')
-X_smt, y_smt = smt.fit_sample(X, y)
 
-#create test and training sets
-X_train, X_test, y_train, y_test = train_test_split(X_smt, y_smt, test_size = 0.20)
+pointDF["dyn_prop"] = pointDF["dyn_prop"].astype('category')
+pointDF["ambig_state"] = pointDF["ambig_state"].astype('category')
+pointDF["x_rms"] = pointDF["x_rms"].astype('category')
+pointDF["y_rms"] = pointDF["y_rms"].astype('category')
+pointDF["y_rms"] = pointDF["y_rms"].astype('category')
+pointDF["invalid_state"] = pointDF["invalid_state"].astype('category')
+pointDF["pdh0"] = pointDF["pdh0"].astype('category')
+pointDF["vx_rms"] = pointDF["vx_rms"].astype('category')
+pointDF["vy_rms"] = pointDF["vy_rms"].astype('category')
+
+X=pointDF[['x','y','dyn_prop','rcs','vx_comp','vy_comp','ambig_state','x_rms','y_rms','invalid_state','pdh0','vx_rms','vy_rms']]
+y=pointDF['BasicCategoryNum']
+sm = SMOTENC(categorical_features=[2,6,7,8,9,10,11,12],n_jobs=6)
+
+start = time.clock()
+smt = SMOTETomek(smote=SMOTENC,ratio='auto')
+X_smt, y_smt = sm.fit_sample(X, y)
+print (time.clock() - start)
 # =============================================================================
 # 
 # Reconstruct full data frame to include BasicCategory
@@ -61,15 +75,15 @@ Buses = Buses.assign(BasicCategory='Bus')
 constructionVehicles=fullOverSampledDf[fullOverSampledDf['BasicCategoryNum']==2]
 constructionVehicles = constructionVehicles.assign(BasicCategory='Construction Vehicle')
 
-reconstructuredOverSampledDF=peds.append([cars, bikes,motorcycles,tractors,trailers,Buses,constructionVehicles])
+reconstructedOverSampledDF=peds.append([cars, bikes,motorcycles,tractors,trailers,Buses,constructionVehicles])
 
-reconstructuredOverSampledDF['BasicCategory'].value_counts()
-reconstructuredOverSampledDF.to_csv('OverSampled_FullDataSet.csv')
+reconstructedOverSampledDF['BasicCategory'].value_counts()
+reconstructedOverSampledDF.to_csv('OverSampled_FullDataSet.csv')
 # =============================================================================
 # 
 # SPLIT DATA INTO TEST AND TRAINING SETS AND SAVE IT
 # 
 # =============================================================================
-train,test = train_test_split(reconstructuredOverSampledDF, test_size = 0.20)
+train,test = train_test_split(reconstructedOverSampledDF, test_size = 0.20)
 train.to_csv('OverSampled_TrainSet.csv')
 test.to_csv('OverSampled_TestSet.csv')
