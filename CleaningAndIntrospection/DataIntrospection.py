@@ -11,21 +11,38 @@ import pylab as pl
 import matplotlib.pyplot as plt
 from mlxtend.plotting import category_scatter
 
-path = "../Data/OverSampled/OverSampled_FullDataSet.csv"
-
+fullDataSetPath = "../Data/UnderSampled/UnderSampled_FullDataSet.csv"
+trainPath="../Data/UnderSampled/UnderSampled_TrainSet.csv"
+testPath="../Data/UnderSampled/UnderSampled_TestSet.csv"
 #Load in cleansed radar points data frame
-pointDF = pd.read_csv(path, index_col=False)
+pointDF = pd.read_csv(fullDataSetPath, index_col=False)
+trainDF = pd.read_csv(trainPath, index_col=False)
+TestDF = pd.read_csv(testPath, index_col=False)
 # =============================================================================
 # 
 # PLOTTING FREQUENCIES OF EACH CLASS
 #     
 # =============================================================================
+#Full Dataset
 fig, ax = plt.subplots()
-ax.set_title('Frequency of Basic Categories in Over Sampled Data Set')
+ax.set_title('Frequency of Basic Categories in Final Data Set')
 ax.set_xlabel('Basic Category Types')
 ax.set_ylabel('Occurances of each Category')
 pointDF['BasicCategory'].value_counts().plot(ax=ax,kind='bar')
 plt.show()
+#Train Set
+fig, ax = plt.subplots()
+ax.set_title('Frequency of Basic Categories in Training Data Set')
+ax.set_xlabel('Basic Category Types')
+ax.set_ylabel('Occurances of each Category')
+trainDF['BasicCategory'].value_counts().plot(ax=ax,kind='bar')
+plt.show()
+#Test Set
+fig, ax = plt.subplots()
+ax.set_title('Frequency of Basic Categories in Test Data Set')
+ax.set_xlabel('Basic Category Types')
+ax.set_ylabel('Occurances of each Category')
+TestDF['BasicCategory'].value_counts().plot(ax=ax,kind='bar')
 # =============================================================================
 # 
 # PLOTTING HISTOGRAMS OF RCS for Objects
