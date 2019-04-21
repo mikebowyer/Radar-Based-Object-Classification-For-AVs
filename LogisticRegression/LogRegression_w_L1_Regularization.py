@@ -24,8 +24,8 @@ test_set = pd.read_csv(test_path, index_col=False)
 train_set['BasicCategory'].value_counts()
 test_set['BasicCategory'].value_counts()
 
-X=train_set[['x','y','dyn_prop','rcs','vx_comp','vy_comp','ambig_state','x_rms','y_rms','invalid_state','pdh0','vx_rms','vy_rms']].to_numpy()
-y=train_set['BasicCategoryNum']
+X_train=train_set[['x','y','dyn_prop','rcs','vx_comp','vy_comp','ambig_state','x_rms','y_rms','invalid_state','pdh0','vx_rms','vy_rms']].to_numpy()
+y_train=train_set['BasicCategoryNum']
 # =============================================================================
 # 
 # LOGISTIC REGRESSION
@@ -33,9 +33,9 @@ y=train_set['BasicCategoryNum']
 # =============================================================================
 #Actualy Logistic Regression Model Run
 start = time.clock()
-generatedLogReg = LogisticRegressionCV(cv=5,penalty='l1', multi_class='ovr',solver='saga',n_jobs=6).fit(X,y)
+generatedLogReg = LogisticRegressionCV(cv=5,penalty='l2', multi_class='ovr',solver='saga',n_jobs=6,tol=.005).fit(X_train,y_train)
 print (time.clock() - start)
-filename = 'savedModels/Train_LogRegCV_5Folds_OVR_L1.sav'
+filename = 'savedModels/Train_LogRegCV_5Folds_OVR_L2.sav'
 pickle.dump(generatedLogReg, open(filename, 'wb')) #export model so you don't need to rerun it and wait forever
 
 # =============================================================================
@@ -44,43 +44,57 @@ pickle.dump(generatedLogReg, open(filename, 'wb')) #export model so you don't ne
 # 
 # =============================================================================
 #read in the model since it was already ran
-CV4Folds_L1_filepath='savedModels/LogRegCV_4Folds_OVR_L1_balanced.sav'
-CV4Folds_L1 = pickle.load(open(CV4Folds_L1_filepath, 'rb'))
-CV4Folds_L2_filepath='savedModels/LogRegCV_4Folds_OVR_L2_balanced.sav'
-CV4Folds_L2 = pickle.load(open(CV4Folds_L2_filepath, 'rb'))
+Train_L1_filepath='savedModels/Train_LogRegCV_5Folds_OVR_L1.sav'
+Train_L1 = pickle.load(open(Train_L1_filepath, 'rb'))
+Train_L2_filepath='savedModels/Train_LogRegCV_5Folds_OVR_L2.sav'
+Train_L2 = pickle.load(open(Train_L2_filepath, 'rb'))
 
 X_test=test_set[['x','y','dyn_prop','rcs','vx_comp','vy_comp','ambig_state','x_rms','y_rms','invalid_state','pdh0','vx_rms','vy_rms']].to_numpy()
+y_test=test_set['BasicCategoryNum']
 # =============================================================================
 # 
-# EVALUATING L1 LOG REG
+# EVALUATING L1 LOG REG For Trianing & Test Sets
 # 
 # =============================================================================
-CV4Folds_L1_coef=CV4Folds_L1.coef_
-CV4Folds_L1_scores=CV4Folds_L1.scores_ 
+#Obtain Coeffecients
+Train_L1_coef=Train_L1.coef_
+predictedl1TrainVals = Train_L1.predict(X_train)
+#Create &Confusion Matrix for training set
+L1Traincm=confusion_matrix(y_train,predictedl1TrainVals)
+plot_confusion_matrix(L1Traincm, normalize=True,
+                      title='Confusion Matrix for Logistic Regression with L1 Penalty on Training Set',
+                      target_names=['Bicycle','Bus','Construction','Motorcycle','Pass. Veh.','Pedestrian','Tractor','Trailer'])
 
-predictedl1TestVals = generatedLogReg.predict(X_test)
-trueTestVals=test_set['BasicCategoryNum']
+predictedl1TestVals = Train_L1.predict(X_test)
+L1Testcm=confusion_matrix(y_test,predictedl1TestVals)
+plot_confusion_matrix(L1Testcm, normalize=True,
+                      title='Confusion Matrix for Logistic Regression with L1 Penalty on Test Set',
+                      target_names=['Bicycle','Bus','Construction','Motorcycle','Pass. Veh.','Pedestrian','Tractor','Trailer'])
 
-#Create &Confusion Matrix
-L1cm=confusion_matrix(trueTestVals,predictedl1TestVals)
-
-plot_confusion_matrix(L1cm, normalize=True,target_names=['0','1','2','3','4','5','6','7'])
 # =============================================================================
 # 
 # EVALUATING L2 LOG REG
 # 
 # =============================================================================
-CV4Folds_L2_coef=CV4Folds_L2.coef_
-CV4Folds_L2_scores=CV4Folds_L2.scores_ 
+#Obtain Coeffecients
+Train_L2_coef=Train_L2.coef_
+predictedl1TrainVals = Train_L2.predict(X_train)
 
-predictedl2TestVals = CV4Folds_L2.predict(X_test)
-trueTestVals=test_set['BasicCategoryNum']
+#Obtain Coeffecients
+Train_L2_coef=Train_L2.coef_
+predictedl2TrainVals = Train_L2.predict(X_train)
+#Create Confusion Matrix for training set
+L2Traincm=confusion_matrix(y_train,predictedl2TrainVals)
+plot_confusion_matrix(L2Traincm, normalize=True,
+                      title='Confusion Matrix for Logistic Regression with L2 Penalty on Training Set',
+                      target_names=['Bicycle','Bus','Construction','Motorcycle','Pass. Veh.','Pedestrian','Tractor','Trailer'])
 
-#Create &Confusion Matrix
-L2cm=confusion_matrix(trueTestVals,predictedl2TestVals)
-
-plot_confusion_matrix(L2cm, normalize=True,target_names=['0','1','2','3','4','5','6','7'])
-
+#Create Confusion Matric for Test Set
+predictedl2TestVals = Train_L2.predict(X_test)
+L2Testcm=confusion_matrix(y_test,predictedl2TestVals)
+plot_confusion_matrix(L2Testcm, normalize=True,
+                      title='Confusion Matrix for Logistic Regression with L2 Penalty on Test Set',
+                      target_names=['Bicycle','Bus','Construction','Motorcycle','Pass. Veh.','Pedestrian','Tractor','Trailer'])
 
 
 
