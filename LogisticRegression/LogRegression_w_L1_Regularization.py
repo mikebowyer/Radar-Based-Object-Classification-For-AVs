@@ -16,9 +16,9 @@ import pickle
 import time
 
 #Load in training and test set
-train_path = "../Data/OverSampled/OverSampled_TrainSet.csv"
+train_path = "../Data/UnderSampled/UnderSampled_TrainSet.csv"
 train_set = pd.read_csv(train_path, index_col=False)
-test_path = "../Data/OverSampled/OverSampled_TestSet.csv"
+test_path = "../Data/UnderSampled/UnderSampled_TestSet.csv"
 test_set = pd.read_csv(test_path, index_col=False)
 
 train_set['BasicCategory'].value_counts()
@@ -31,13 +31,11 @@ y=train_set['BasicCategoryNum']
 # LOGISTIC REGRESSION
 #
 # =============================================================================
-train_set['BasicCategory'].value_counts()
-train_set['BasicCategoryNum'].value_counts()
 #Actualy Logistic Regression Model Run
 start = time.clock()
-generatedLogReg = LogisticRegressionCV(cv=3,penalty='l1', multi_class='ovr',solver='saga',n_jobs=6,tol=.005).fit(X,y)
+generatedLogReg = LogisticRegressionCV(cv=5,penalty='l1', multi_class='ovr',solver='saga',n_jobs=6).fit(X,y)
 print (time.clock() - start)
-filename = 'overSampled_LogRegCV_3Folds_OVR_L1_balanced.sav'
+filename = 'savedModels/Train_LogRegCV_5Folds_OVR_L1.sav'
 pickle.dump(generatedLogReg, open(filename, 'wb')) #export model so you don't need to rerun it and wait forever
 
 # =============================================================================
@@ -60,7 +58,7 @@ X_test=test_set[['x','y','dyn_prop','rcs','vx_comp','vy_comp','ambig_state','x_r
 CV4Folds_L1_coef=CV4Folds_L1.coef_
 CV4Folds_L1_scores=CV4Folds_L1.scores_ 
 
-predictedl1TestVals = CV4Folds_L1.predict(X_test)
+predictedl1TestVals = generatedLogReg.predict(X_test)
 trueTestVals=test_set['BasicCategoryNum']
 
 #Create &Confusion Matrix
