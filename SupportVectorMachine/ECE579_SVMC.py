@@ -47,22 +47,22 @@ pred_train = svm_import.predict(X_train)
 
 #Evaluate on the training dataset to determine severity of overfitting
 print(confusion_matrix(y_train,
-                       pred_train,
-                       title='SVM With RBF Confusion Matrix On Training Set',
-                       target_names=['Bicycle','Bus','Construction','Motorcycle','Pass. Veh.','Pedestrian','Tractor','Trailer']))
+                       pred_train))
+                       #title='SVM With RBF Confusion Matrix On Training Set',
+                       #target_names=['Bicycle','Bus','Construction','Motorcycle','Pass. Veh.','Pedestrian','Tractor','Trailer']))
 #print(confusion_matrix_trainingset)
 print(classification_report(y_train,
-                            pred_train,
-                            title='SVM With RBF Classification Report On Training Set',
-                            target_names=['Bicycle','Bus','Construction','Motorcycle','Pass. Veh.','Pedestrian','Tractor','Trailer']))
+                            pred_train))
+                            #title='SVM With RBF Classification Report On Training Set',
+                            #target_names=['Bicycle','Bus','Construction','Motorcycle','Pass. Veh.','Pedestrian','Tractor','Trailer']))
 
 #Evaluate on the test dataset
 print(confusion_matrix(y_test,
-                       pred_test,
-                       title='SVM With RBF Confusion Matrix On Test Set',
-                       target_names=['Bicycle','Bus','Construction','Motorcycle','Pass. Veh.','Pedestrian','Tractor','Trailer']))
+                       pred_test))
+                       #title='SVM With RBF Confusion Matrix On Test Set',
+                       #target_names=['Bicycle','Bus','Construction','Motorcycle','Pass. Veh.','Pedestrian','Tractor','Trailer']))
 
 print(classification_report(y_test,
-                            pred_test,
-                            title='SVM With RBF Classification Report On Test Set',
-                            target_names=['Bicycle','Bus','Construction','Motorcycle','Pass. Veh.','Pedestrian','Tractor','Trailer']))
+                            pred_test))
+                            #title='SVM With RBF Classification Report On Test Set',
+                            #target_names=['Bicycle','Bus','Construction','Motorcycle','Pass. Veh.','Pedestrian','Tractor','Trailer']))
