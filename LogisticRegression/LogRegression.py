@@ -16,16 +16,35 @@ import pickle
 import time
 
 #Load in training and test set
-train_path = "../Data/UnderSampled/UnderSampled_TrainSet.csv"
+train_path = "../Data/UnderSampledHotEncoded/UnderSampledHotEncoded_TrainSet.csv"
 train_set = pd.read_csv(train_path, index_col=False)
-test_path = "../Data/UnderSampled/UnderSampled_TestSet.csv"
+test_path = "../Data/UnderSampledHotEncoded/UnderSampledHotEncoded_TestSet.csv"
 test_set = pd.read_csv(test_path, index_col=False)
 
-train_set['BasicCategory'].value_counts()
-test_set['BasicCategory'].value_counts()
+print(train_set['BasicCategory'].value_counts())
+print(test_set['BasicCategory'].value_counts())
+columns=['x','y',
+                   'dyn_prop_moving','dyn_prop_stationary','dyn_prop_oncoming','dyn_prop_stationary_candidate',
+                   'dyn_prop_unknown','dyn_prop_crossing stationary','dyn_prop_crossing moving',
+                   'rcs','vx_comp','vy_comp',
+                   'ambig_state_invalid','ambig_state_ambiguous','ambig_state_staggered ramp','ambig_state_unambiguous',
+                   'x_rms','y_rms',
+                   'invalid_state_valid',
+                   'invalid_state_valid_low_RCS',
+                   'invalid_state_valid_azimuth_correction',
+                   'invalid_state_valid_high_child_prob',
+                   'invalid_state_valid_high_prob_50_artefact',
+                   'invalid_state_valid_no_local_max',
+                   'invalid_state_valid_high_artefact_prob',
+                   'invalid_state_valid_above_95m',
+                   'invalid_state_valid_high_multitarget_prob',
+                   'False alarm <25%','False alarm 75%','False alarm 99.9%',
+                   'vx_rms','vy_rms']
 
-X_train=train_set[['x','y','dyn_prop','rcs','vx_comp','vy_comp','ambig_state','x_rms','y_rms','invalid_state','pdh0','vx_rms','vy_rms']].to_numpy()
+X_train=train_set[columns].to_numpy()
 y_train=train_set['BasicCategoryNum']
+X_test=test_set[columns].to_numpy()
+y_test=test_set['BasicCategoryNum']
 # =============================================================================
 # 
 # LOGISTIC REGRESSION
@@ -33,9 +52,9 @@ y_train=train_set['BasicCategoryNum']
 # =============================================================================
 #Actualy Logistic Regression Model Run
 start = time.clock()
-generatedLogReg = LogisticRegressionCV(cv=5,penalty='l2', multi_class='ovr',solver='saga',n_jobs=6,tol=.005).fit(X_train,y_train)
+generatedLogReg = LogisticRegressionCV(cv=5,penalty='l1', multi_class='ovr',solver='saga',n_jobs=6,tol=.005).fit(X_train,y_train)
 print (time.clock() - start)
-filename = 'savedModels/Train_LogRegCV_5Folds_OVR_L2.sav'
+filename = 'savedModels/hotEncode_Train_LogRegCV_3Folds_OVR_L1.sav'
 pickle.dump(generatedLogReg, open(filename, 'wb')) #export model so you don't need to rerun it and wait forever
 
 # =============================================================================
