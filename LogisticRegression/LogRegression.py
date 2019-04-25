@@ -52,9 +52,9 @@ y_test=test_set['BasicCategoryNum']
 # =============================================================================
 #Actualy Logistic Regression Model Run
 start = time.clock()
-generatedLogReg = LogisticRegressionCV(cv=5,penalty='l1', multi_class='ovr',solver='saga',n_jobs=6,tol=.005).fit(X_train,y_train)
+generatedLogReg = LogisticRegressionCV(cv=5,penalty='l2', multi_class='ovr',solver='saga',n_jobs=6,tol=.005).fit(X_train,y_train)
 print (time.clock() - start)
-filename = 'savedModels/hotEncode_Train_LogRegCV_3Folds_OVR_L1.sav'
+filename = 'savedModels/hotEncode_Train_LogRegCV_5Folds_OVR_L2.sav'
 pickle.dump(generatedLogReg, open(filename, 'wb')) #export model so you don't need to rerun it and wait forever
 
 # =============================================================================
@@ -63,12 +63,12 @@ pickle.dump(generatedLogReg, open(filename, 'wb')) #export model so you don't ne
 # 
 # =============================================================================
 #read in the model since it was already ran
-Train_L1_filepath='savedModels/Train_LogRegCV_5Folds_OVR_L1.sav'
+Train_L1_filepath='savedModels/hotEncode_Train_LogRegCV_3Folds_OVR_L1.sav'
 Train_L1 = pickle.load(open(Train_L1_filepath, 'rb'))
-Train_L2_filepath='savedModels/Train_LogRegCV_5Folds_OVR_L2.sav'
+Train_L2_filepath='savedModels/hotEncode_Train_LogRegCV_5Folds_OVR_L2.sav'
 Train_L2 = pickle.load(open(Train_L2_filepath, 'rb'))
 
-X_test=test_set[['x','y','dyn_prop','rcs','vx_comp','vy_comp','ambig_state','x_rms','y_rms','invalid_state','pdh0','vx_rms','vy_rms']].to_numpy()
+X_test=test_set[columns].to_numpy()
 y_test=test_set['BasicCategoryNum']
 # =============================================================================
 # 

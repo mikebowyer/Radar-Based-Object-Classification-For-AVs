@@ -11,9 +11,9 @@ import pylab as pl
 import matplotlib.pyplot as plt
 from mlxtend.plotting import category_scatter
 
-fullDataSetPath = "../Data/UnderSampled/UnderSampled_FullDataSet.csv"
-trainPath="../Data/UnderSampled/UnderSampled_TrainSet.csv"
-testPath="../Data/UnderSampled/UnderSampled_TestSet.csv"
+fullDataSetPath = "../Data/UnderSampledHotEncoded/UnderSampledHotEncoded_FullSet.csv"
+trainPath="../Data/UnderSampledHotEncoded/UnderSampledHotEncoded_TrainSet.csv"
+testPath="../Data/UnderSampledHotEncoded/UnderSampledHotEncoded_TestSet.csv"
 #Load in cleansed radar points data frame
 pointDF = pd.read_csv(fullDataSetPath, index_col=False)
 trainDF = pd.read_csv(trainPath, index_col=False)
