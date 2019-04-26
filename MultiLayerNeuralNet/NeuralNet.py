@@ -9,6 +9,8 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.metrics import confusion_matrix
 import pandas as pd
 import time
+import pickle
+
 # =============================================================================
 # 
 # LOAD IN DATA
@@ -36,10 +38,27 @@ columns=['x','y',
                    'invalid_state_valid_high_multitarget_prob',
                    'False alarm <25%','False alarm 75%','False alarm 99.9%',
                    'vx_rms','vy_rms']
-X_train=train_set[columns].to_numpy()
+
+columnsSub=[
+                   'rcs','vx_comp',
+                   'ambig_state_invalid','ambig_state_ambiguous','ambig_state_staggered ramp','ambig_state_unambiguous',
+                   'x_rms','y_rms',
+                   'invalid_state_valid',
+                   'invalid_state_valid_low_RCS',
+                   'invalid_state_valid_azimuth_correction',
+                   'invalid_state_valid_high_child_prob',
+                   'invalid_state_valid_high_prob_50_artefact',
+                   'invalid_state_valid_no_local_max',
+                   'invalid_state_valid_high_artefact_prob',
+                   'invalid_state_valid_above_95m',
+                   'invalid_state_valid_high_multitarget_prob',
+                   'False alarm <25%','False alarm 75%','False alarm 99.9%',
+                   'vx_rms','vy_rms']
+
+X_train=train_set[columnsSub].to_numpy()
 y_train=train_set['BasicCategoryNum']
 
-X_test=test_set[columns].to_numpy()
+X_test=test_set[columnsSub].to_numpy()
 y_test=test_set['BasicCategoryNum']
 # =============================================================================
 # 
@@ -48,21 +67,24 @@ y_test=test_set['BasicCategoryNum']
 # =============================================================================
 start = time.clock()
 clf = MLPClassifier(solver='adam',
-                   hidden_layer_sizes=(5, 2), random_state=1, alpha=.001, activation='logistic')
+                   hidden_layer_sizes=(15,10), random_state=1, alpha=.001, activation='logistic')
 clf.fit(X_train, y_train)
 print (time.clock() - start)
+
+filename = 'savedModels/MLP_10x5_logistic.sav'
+pickle.dump(clf, open(filename, 'wb'))
 
 predictedlTrainVals = clf.predict(X_train)
 #Create Confusion Matrix for training set
 NNTraincm=confusion_matrix(y_train,predictedlTrainVals)
 plot_confusion_matrix(NNTraincm, normalize=True,
-                      title='Confusion Matrix for Logistic Regression with L2 Penalty on Training Set',
+                      title='Confusion Matrix for 2 Layer Neural Netowrk with 15x10 Neurons on Training Set',
                       target_names=['Bicycle','Bus','Construction','Motorcycle','Pass. Veh.','Pedestrian','Tractor','Trailer'])
 
 predictedlTestVals = clf.predict(X_test)
 NNTestcm=confusion_matrix(y_test,predictedlTestVals)
 plot_confusion_matrix(NNTestcm, normalize=True,
-                      title='Confusion Matrix for Logistic Regression with L1 Penalty on Test Set',
+                      title='Confusion Matrix for 2 Layer Neural Netowrk with 15x10 Neurons on Test Set',
                       target_names=['Bicycle','Bus','Construction','Motorcycle','Pass. Veh.','Pedestrian','Tractor','Trailer'])
     
     
